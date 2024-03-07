@@ -14,6 +14,10 @@ app.get('/ProjekRPL', (req, res) => {
   res.send('GACOR KANG BINGUNG GWAH');
 });
 
+app.get('/users', (req, res) => {
+  res.send('Daftar pengguna');
+});
+
 app.post('/login', (req, res) =>{
   console.log({requestFromOutside : req.body});
   res.send('Login berhasil cuy');
