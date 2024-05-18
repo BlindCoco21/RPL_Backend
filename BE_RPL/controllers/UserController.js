@@ -46,13 +46,20 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    await User.destroy({
-      where: {
-        id: req.params.id,
-      },
+    const deletedRows = await User.destroy({
+      where: {},
+      truncate: true,
     });
+
+    if (deletedRows > 0) {
+      const [results, metadata] = await User.sequelize.query('ALTER TABLE User AUTO_INCREMENT = 1;');
+      console.log('Reset auto-increment result:', results);
+      console.log('Metadata:', metadata);
+    }
+
     res.status(200).json({ msg: "User Deleted" });
   } catch (error) {
-    console.log(error.message);
+    console.error('Error resetting auto-increment:', error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
